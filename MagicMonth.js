@@ -31,24 +31,68 @@ function DoDateCalc()
   
   var SaveMonth = YearBegin.getUTCMonth();
   var Months = [];
+  var Dates = [];
+  var LocalDates = [];
+  LocalDates.push(YearBegin.getUTCDate());
+  Months.toString()
   while(YearBegin.getFullYear() === yyyy)
   {
      YearBegin.setUTCDate(YearBegin.getUTCDate()+Increment);
      if(YearBegin.getUTCMonth() === SaveMonth)
      {
         check_index++;
+        LocalDates.push(YearBegin.getUTCDate());
      }
      else
      {
          check_index = 1;
          SaveMonth = YearBegin.getUTCMonth();
+         LocalDates = [];
+         LocalDates.push(YearBegin.getUTCDate());
      }
      if(check_index > BeatPaychecks)
      {
          Months.push(monthNames[YearBegin.getUTCMonth()])
+         Dates.push(LocalDates);
      }
   }
-  alert(Months.toString());
+
+  var DelIndex = 0;
+  var delElem = document.getElementById(DelIndex);
+  while(delElem !== null)
+  {
+    delElem.remove();
+    delElem = document.getElementById(++DelIndex);
+  }
+  var i,j;
+  for (i = 0; i < Months.length; i++) {
+      var elem = document.createElement('div');
+      elem.id = i;
+      elem.style.cssText = "margin: 5px; font-weight: bold;"; 
+      var date_nth = "";
+      for (j = 0; j < Dates[i].length; j++)
+      {
+          if(date_nth.length)
+          {
+              date_nth = date_nth + ", ";
+          }
+          date_nth = date_nth + Dates[i][j] + nth(Dates[i][j]);
+      }
+      elem.innerHTML = Months[i] + ' (' + date_nth + ')';
+      document.body.appendChild(elem);
+  }
+
+
+}
+
+const nth = function(d) {
+  if (d > 3 && d < 21) return 'th';
+  switch (d % 10) {
+    case 1:  return "st";
+    case 2:  return "nd";
+    case 3:  return "rd";
+    default: return "th";
+  }
 }
 
 function GetTodaysDate() {
